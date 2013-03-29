@@ -234,46 +234,47 @@ def get_decision(dealer_up_card, player_hand, true_count, split_count, round_cou
 			elif dealer_up_card == '6' and true_count >= 4.0:
 				return 'split', insurance
 
+	
 	#strategy adjustments based on count
-	if true_count <= -2.0:
-		if player_current_total == 12 and dealer_up_card == '5':
-			return 'hit', insurance
-		elif player_current_total == 13 and dealer_up_card == '3':
-			return 'hit', insurance
-	elif true_count <= -1.0:
-		if player_current_total == 13 and dealer_up_card == '2':
-			return 'hit', insurance
-		elif player_current_total == 12 and dealer_up_card == '6':
-			return 'hit', insurance
-	elif true_count <= 0.0:
+	if true_count <= 0:
 		if player_current_total == 12 and dealer_up_card == '4':
 			return 'hit', insurance
-	elif true_count >= 0.0:
+		if true_count <= -1.0:
+			if player_current_total == 13 and dealer_up_card == '2':
+				return 'hit', insurance
+			elif player_current_total == 12 and dealer_up_card == '6':
+				return 'hit', insurance
+			if true_count <= -2.0:
+				if player_current_total == 12 and dealer_up_card == '5':
+					return 'hit', insurance
+				elif player_current_total == 13 and dealer_up_card == '3':
+					return 'hit', insurance
+	elif true_count > 0.0:
 		if player_current_total == 16 and (dealer_up_card == 'T' or dealer_up_card == 'J' or dealer_up_card == 'Q' or dealer_up_card == 'K'):
 			return 'stand', insurance
-	elif true_count >= 1.0:
-		if player_current_total == 11 and dealer_up_card == 'A':
-			return 'double', insurance
-		elif player_current_total == 9 and dealer_up_card == '2':
-			return 'double', insurance
-	elif true_count >= 2.0:
-		if player_current_total == 12 and dealer_up_card == '3':
-			return 'stand', insurance
-	elif true_count >= 3.0:
-		if player_current_total == 12 and dealer_up_card == '2':
-			return 'stand', insurance
-		elif player_current_total == 9 and dealer_up_card == '7':
-			return 'double', insurance
-	elif true_count >= 4.0:
-		if player_current_total == 15 and (dealer_up_card == 'T' or dealer_up_card == 'J' or dealer_up_card == 'Q' or dealer_up_card == 'K'):
-			return 'stand', insurance
-		elif player_current_total == 10 and (dealer_up_card == 'T' or dealer_up_card == 'J' or dealer_up_card == 'Q' or dealer_up_card == 'K'):
-			return 'double', insurance
-		elif player_current_total == 10 and dealer_up_card == 'A':
-			return 'double', insurance
-	elif true_count >= 5.0:
-		if player_current_total == 16 and dealer_up_card == '9':
-			return 'stand', insurance	
+		if true_count >= 1.0:
+			if player_current_total == 11 and dealer_up_card == 'A':
+				return 'double', insurance
+			elif player_current_total == 9 and dealer_up_card == '2':
+				return 'double', insurance
+			if true_count >= 2.0:
+				if player_current_total == 12 and dealer_up_card == '3':
+					return 'stand', insurance
+				if true_count >= 3.0:
+					if player_current_total == 12 and dealer_up_card == '2':
+						return 'stand', insurance
+					elif player_current_total == 9 and dealer_up_card == '7':
+						return 'double', insurance
+					if true_count >= 4.0:
+						if player_current_total == 15 and (dealer_up_card == 'T' or dealer_up_card == 'J' or dealer_up_card == 'Q' or dealer_up_card == 'K'):
+							return 'stand', insurance
+						elif player_current_total == 10 and (dealer_up_card == 'T' or dealer_up_card == 'J' or dealer_up_card == 'Q' or dealer_up_card == 'K'):
+							return 'double', insurance
+						elif player_current_total == 10 and dealer_up_card == 'A':
+							return 'double', insurance
+						if true_count >= 5.0:
+							if player_current_total == 16 and dealer_up_card == '9':
+								return 'stand', insurance	
 
 
 	#if no splitting or adjustment should be made based on count, play basic strategy:
@@ -372,12 +373,14 @@ def get_card(shoe):
 
 pnl_sets = []
 
-for y in range(0,10): #play x shoes y times
+for y in range(0,250): #play x shoes y times
 	cumulative_pnl = 0
-	for x in range(0,40): #play 40 shoes
+	for x in range(0,20): #play 40 shoes
 		pnl = play(decks=6, penetration=0.75, num_players=1, bankroll=1000.0)
 		cumulative_pnl += pnl
 	pnl_sets.append(cumulative_pnl)
 
 print 'cumulative_pnl: ', cumulative_pnl
-print 'pnl_sets: ', pnl_sets 
+print 'pnl_sets: '
+for pnl in pnl_sets:
+	print pnl 
